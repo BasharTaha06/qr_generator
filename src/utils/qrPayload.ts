@@ -33,7 +33,7 @@ export function buildQrPayload(content: ContentState): string {
       return buildUrlWithUtm(content.url);
 
     case 'text':
-      return content.text.trim() || 'Hello from QRForge Studio';
+      return content.text.trim() || 'Hello from QRBTA';
 
     case 'wifi': {
       const { ssid, password, encryption, hidden } = content.wifi;

@@ -14,11 +14,12 @@ import { CENTER_ICONS, INITIAL_STUDIO_STATE, QR_THEME_PRESETS } from './data/pre
 import { DotStyle, SavedDesign, StudioState } from './types';
 import { getPayloadSummary } from './utils/qrPayload';
 
-const STORAGE_KEY = 'qrforge_saved_designs_v1';
+const STORAGE_KEY = 'qrbta_saved_designs_v1';
+const LEGACY_STORAGE_KEY = 'qrforge_saved_designs_v1';
 
 function loadSavedDesigns(): SavedDesign[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -124,7 +125,7 @@ export function App() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-modern text-lg sm:text-xl font-bold tracking-tight text-slate-900">
-                  QRForge Studio
+                  QRBTA
                 </h1>
                 <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
                   Vector &amp; 4K
@@ -272,7 +273,7 @@ export function App() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500 no-print">
-        QRForge Studio — 100% client-side QR generation. Zero tracking, instant vector SVG &amp; 4K 300 DPI exports.
+        QRBTA — 100% client-side QR generation. Zero tracking, instant vector SVG &amp; 4K 300 DPI exports.
       </footer>
 
       {/* Toast Notification */}

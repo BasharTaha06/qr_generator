@@ -381,7 +381,7 @@ export const INITIAL_STUDIO_STATE: StudioState = {
     eyebrow: 'Quick Access',
     heading: 'Scan to Connect',
     subtitle: 'Point your phone camera here to open the link directly on your device',
-    footer: 'Instant Access • Powered by QRForge',
+    footer: 'Instant Access • Powered by QRBTA',
     showEncodedHint: true,
     cardBg: '#FFFFFF',
     cardText: '#0F172A',

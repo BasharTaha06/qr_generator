@@ -1,6 +1,6 @@
 <div align="center">
 
-# QRForge Studio
+# QRBTA
 
 ### Custom Vector SVG &amp; 4K Printable QR Code Generator
 
@@ -179,6 +179,6 @@ firebase deploy --only hosting
 
 <div align="center">
 
-Built with React, TypeScript, Tailwind CSS &amp; `qr-code-styling` • **[Launch QRForge Studio](https://qrforge-studio-bt.web.app)**
+Built with React, TypeScript, Tailwind CSS &amp; `qr-code-styling` • **[Launch QRBTA](https://qrforge-studio-bt.web.app)**
 
 </div>
