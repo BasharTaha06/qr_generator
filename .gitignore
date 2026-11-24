@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Environment & OS
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
+*.local
