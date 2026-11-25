@@ -89,6 +89,14 @@ test('buildCenterLogoDataUrl generates SVG data URLs for icons and monograms', (
 
   const noneUrl = buildCenterLogoDataUrl({ ...INITIAL_STUDIO_STATE.logo, mode: 'none' });
   assert.equal(noneUrl, undefined);
+
+  for (const ic of CENTER_ICONS) {
+    const url = buildCenterLogoDataUrl(
+      { ...INITIAL_STUDIO_STATE.logo, mode: 'icon', iconId: ic.id },
+      ic.svgInner
+    );
+    assert.ok(url?.startsWith('data:image/svg+xml;charset=utf-8,'), `Icon ${ic.id} failed`);
+  }
 });
 
 test('buildQrStylingOptions configures gradients, custom corners, and transparent bg', () => {

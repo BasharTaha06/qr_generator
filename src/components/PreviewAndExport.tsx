@@ -30,13 +30,50 @@ type StageBackdrop = 'light' | 'slate' | 'dark' | 'checker';
 type ExportResolution = 512 | 1024 | 2048 | 4096;
 type RasterFormat = 'png' | 'jpeg' | 'webp';
 
+interface QrCanvasHostProps {
+  state: StudioState;
+  className: string;
+}
+
+const QrCanvasHost: React.FC<QrCanvasHostProps> = ({ state, className }) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const instanceRef = useRef<QRCodeStyling | null>(null);
+  const mountedElRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const opts = buildQrStylingOptions(state, 260, 'svg');
+    if (!instanceRef.current || mountedElRef.current !== container) {
+      container.innerHTML = '';
+      const instance = new QRCodeStyling(opts);
+      instance.append(container);
+      instanceRef.current = instance;
+      mountedElRef.current = container;
+    } else {
+      instanceRef.current.update(opts);
+    }
+  }, [state]);
+
+  useEffect(() => {
+    return () => {
+      instanceRef.current = null;
+      mountedElRef.current = null;
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
+    };
+  }, []);
+
+  return <div ref={containerRef} className={`qr-svg-host ${className}`} />;
+};
+
 export const PreviewAndExport: React.FC<PreviewAndExportProps> = ({
   state,
   onUpdateStageMode,
   onNotify,
 }) => {
-  const qrMountRef = useRef<HTMLDivElement | null>(null);
-  const qrInstanceRef = useRef<QRCodeStyling | null>(null);
   const captureRef = useRef<HTMLDivElement | null>(null);
 
   const [backdrop, setBackdrop] = useState<StageBackdrop>('slate');
@@ -44,22 +81,6 @@ export const PreviewAndExport: React.FC<PreviewAndExportProps> = ({
   const [rasterFormat, setRasterFormat] = useState<RasterFormat>('png');
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [copiedPng, setCopiedPng] = useState(false);
-
-  // Mount & live-update SVG QR engine
-  useEffect(() => {
-    const container = qrMountRef.current;
-    if (!container) return;
-
-    const opts = buildQrStylingOptions(state, 260, 'svg');
-    if (!qrInstanceRef.current) {
-      container.innerHTML = '';
-      const instance = new QRCodeStyling(opts);
-      instance.append(container);
-      qrInstanceRef.current = instance;
-    } else {
-      qrInstanceRef.current.update(opts);
-    }
-  }, [state]);
 
   const fileSlug = (() => {
     const summary = getPayloadSummary(state.content)
@@ -298,9 +319,10 @@ export const PreviewAndExport: React.FC<PreviewAndExportProps> = ({
         <div id="exportCaptureTarget" ref={captureRef} className="inline-flex justify-center w-full">
           {stageMode === 'qr' ? (
             <FramedQrWrapper frame={frame}>
-              <div
-                ref={qrMountRef}
-                className="qr-svg-host w-[235px] h-[235px] sm:w-[260px] sm:h-[260px] flex items-center justify-center"
+              <QrCanvasHost
+                key={`qr-${frame.style}`}
+                state={state}
+                className="w-[235px] h-[235px] sm:w-[260px] sm:h-[260px]"
               />
             </FramedQrWrapper>
           ) : (
@@ -349,9 +371,10 @@ export const PreviewAndExport: React.FC<PreviewAndExportProps> = ({
                   className="p-2.5 bg-white rounded-2xl shadow-sm border relative"
                   style={{ borderColor: `${card.accentColor}30` }}
                 >
-                  <div
-                    ref={qrMountRef}
-                    className="qr-svg-host w-[190px] h-[190px] sm:w-[210px] sm:h-[210px] flex items-center justify-center"
+                  <QrCanvasHost
+                    key="card-qr"
+                    state={state}
+                    className="w-[190px] h-[190px] sm:w-[210px] sm:h-[210px]"
                   />
 
                   {card.showScanBadge && card.scanBadgeText && (

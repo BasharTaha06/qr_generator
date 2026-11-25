@@ -116,18 +116,22 @@ export const DesignControls: React.FC<DesignControlsProps> = ({ state, onUpdate 
     reader.onload = () => {
       const result = typeof reader.result === 'string' ? reader.result : '';
       if (!result) return;
-      onUpdate((prev) => ({
-        ...prev,
-        logo: {
-          ...prev.logo,
-          mode: 'upload',
-          uploadedDataUrl: result,
-        },
-        qr: {
-          ...prev.qr,
-          errorCorrectionLevel: 'H',
-        },
-      }));
+      const probe = new Image();
+      probe.onload = () => {
+        onUpdate((prev) => ({
+          ...prev,
+          logo: {
+            ...prev.logo,
+            mode: 'upload',
+            uploadedDataUrl: result,
+          },
+          qr: {
+            ...prev.qr,
+            errorCorrectionLevel: 'H',
+          },
+        }));
+      };
+      probe.src = result;
     };
     reader.readAsDataURL(file);
     e.target.value = '';
